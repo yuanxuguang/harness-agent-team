@@ -1,0 +1,54 @@
+# 产品配置设计示例，尚无加载器或校验器。
+# 不是 DeepSeek Harness 官方可执行 YAML；不要直接用于启动或部署。
+# 尖括号内容均为待填写占位符，不包含任何有效凭据。
+schema_version: "proposal-0"
+
+project:
+  id: "<project-id>"
+  name: "<project-name>"
+  repositories:
+    - id: "<repository-id>"
+      url: "<repository-url>"
+      default_branch: "<verified-default-branch>"
+
+channel_bindings:
+  - channel: "feishu"
+    group_id: "<group-id>"
+    project_id: "<project-id>"
+    credential_ref: "<secret-store-reference>"
+
+bots:
+  - bot_id: "member_a"
+    name: "项目伙伴甲"
+    behavior: "<member-instructions>"
+    runtime: "<supported-runtime>"
+    model: "<model-supported-by-this-runtime>"
+    credential_ref: "<secret-store-reference>"
+  - bot_id: "member_b"
+    name: "项目伙伴乙"
+    behavior: "<member-instructions>"
+    runtime: "<supported-runtime>"
+    model: "<model-supported-by-this-runtime>"
+    credential_ref: "<secret-store-reference>"
+
+team:
+  coordinator_bot_id: "member_a"
+  role_assignments:
+    - bot_id: "member_a"
+      roles: ["coordinator", "reviewer"]
+    - bot_id: "member_b"
+      roles: ["developer", "tester"]
+
+# 角色仅为示例，可增删、兼任或交接，不绑定任何厂商。
+# 任务覆盖 > 项目团队配置 > 机器人默认配置 > 系统默认值。
+# 有效权限始终取各级限制的交集，覆盖配置不能扩大权限。
+task_override_example:
+  owner_bot_id: "member_b"
+  runtime: "<selected-compatible-runtime>"
+  model: "<selected-available-model>"
+
+policy:
+  max_parallel_runs: 3
+  max_auto_rework_rounds: 2
+  nested_delegation_budget: 0
+  # 数字为可调整示例，不代表已测得的最佳值。
